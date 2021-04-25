@@ -1,0 +1,21 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: validation-webhook-cfg
+  namespace: kube-system
+  labels:
+    app: admission-webhook
+webhooks:
+  - name: validation-webhook.hundsun.com
+    clientConfig:
+      service:
+        name: admission-webhook-svc
+        namespace: kube-system
+        path: "/validating"
+      caBundle: ${CA_BUNDLE}
+    rules:
+      - operations: [ "CREATE", "UPDATE" ]
+        apiGroups: ["apps", "extensions", ""]
+        apiVersions: ["v1", "v1beta1"]
+        resources: ["services", "ingresses"]
+：
